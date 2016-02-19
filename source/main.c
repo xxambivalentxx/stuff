@@ -25,7 +25,6 @@ int main(int argc, char **argv) {
 				set_fstart(fp);
 				
 				if ((err = interval_data(fp, &pd, stime)) == 0) {
-					print_parsed_data(&pd);
 					print_json(&pd);
 				} else {
 					printf("parse_avg_minute() failed with %i\n", err);
@@ -68,5 +67,5 @@ static void print_json(struct parsed_data *pd) {
 		}
 	}
 	
-	printf("]}\n");
+	printf("]}");
 }
