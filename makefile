@@ -2,7 +2,7 @@ SOURCE 	= source/
 BUILD	= build/
 INCLUDE	= include/
 TARGET	= edata-parse
-CFLAGS = -g -I $(INCLUDE) -m32 -std=gnu99 -O2 -Wall -Werror
+CFLAGS = -g -I $(INCLUDE) -std=gnu99 -O2 -Wall -Werror
 
 all: $(TARGET)
 
