@@ -30,8 +30,6 @@ int main(int argc, char **argv) {
 				} else {
 					printf("parse_avg_minute() failed with %i\n", err);
 				}
-			} else {
-				printf("skip_lines() failed with %i\n", err);
 			}
 			
 			fclose(fp);
