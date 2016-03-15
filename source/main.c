@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 		printf("%s [file_name] [interval]\n", argv[0]);
 	} else {
 		stime 	= atoi(argv[2]);
-		fp		= fopen(argv[1], "r");
+		fp	= fopen(argv[1], "r");
 		
 		if (fp == NULL) {
 			printf("Unable to open file %s!  Exiting ungracefully...\n", argv[1]);
@@ -38,35 +38,15 @@ int main(int argc, char **argv) {
 	
 	return ret;
 }
-/*
- * struct parsed_date {
-	char month[4];
-	int year;
-	int day;
-};
-
-struct parsed_time {
-	int hours;
-	int minutes;
-	int seconds;
-	int mseconds;
-};
-
-struct parsed_data {
-	struct parsed_time time;
-	struct parsed_date date;
-	struct meter_data meters[4];
-};
-*/
 
 static void print_json(struct parsed_data *pd, struct parsed_time *end) {
 	char quo = '\"';
 	char met_name[] = "\"meter\"";
 	char watts[]	= "\"watts\"";
-	char var[]		= "\"var\"";
-	char amps[]		= "\"amps\"";
+	char var[]	= "\"var\"";
+	char amps[]	= "\"amps\"";
 	char volts[]	= "\"volts\"";
-	int s_hours = pd->time.hours;
+	int s_hours 	= pd->time.hours;
 	int s_min	= pd->time.minutes;
 	int s_day	= pd->date.day;
 	int e_hours	= s_hours;
@@ -76,7 +56,7 @@ static void print_json(struct parsed_data *pd, struct parsed_time *end) {
 	/* time manipulation and all that jazzery */
 	/* one of the things I failed to take into account
 	 * is switching between months.  Hopefully this software
-	 * isn't taken into production because it straight up terrible.
+	 * isn't taken into "production" because it straight up terrible.
 	 */
 	if (e_min >= 60) {
 		e_hours += 1;
@@ -88,10 +68,9 @@ static void print_json(struct parsed_data *pd, struct parsed_time *end) {
 		
 		e_min = 0;
 	}
-		//meter_data_2016-02-22-17:30-17:45
+	
 	printf("{meter_data_%i-%s-%i-%i:%i-%i:%i:[", pd->date.year, pd->date.month, e_day,
-		s_hours, s_min, e_hours, e_min);
-	//printf("{%s:[", arr_name);
+		s_hours, s_min, e_hours, e_min);;
 	
 	for (int i = 0; i < 4; i++) {
 		struct meter_data *md = &pd->meters[i];
