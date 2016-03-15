@@ -219,9 +219,6 @@ int parse_avg_minute(FILE *fp, struct parsed_data *pd, struct parsed_time *start
 
 			if (err == 0 && cnt > 0) {
 				average_meter_data(&out, cnt + 1);
-				//printf("parse_avg_minute() average of interval:\n");
-				//print_parsed_data(&out);
-				//printf("\n\n");
 				memcpy(pd, &out, sizeof(struct parsed_data));
 			}
 		} else {
@@ -234,7 +231,7 @@ int parse_avg_minute(FILE *fp, struct parsed_data *pd, struct parsed_time *start
 	return ret;
 }
 
-int interval_data(FILE *fp, struct parsed_data *pd, int start_interval) {
+int interval_data(FILE *fp, struct parsed_data *pd, int start_interval, struct parsed_time *end_time) {
 	int ret 	= 0;
 	int cnt		= 0;
 	int err		= 0;
@@ -263,6 +260,7 @@ int interval_data(FILE *fp, struct parsed_data *pd, int start_interval) {
 	if (cnt > 0 && err == 0) {
 		average_meter_data(&out, cnt + 1);
 		memcpy(pd, &out, sizeof(struct parsed_data));
+		memcpy(end_time, &start, sizeof(struct parsed_time));
 	}
 
 	return ret;

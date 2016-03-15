@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <parse.h>
-static void print_json(struct parsed_data *pd);
+static void print_json(struct parsed_data *pd, struct parsed_time *end);
 
 int main(int argc, char **argv) {
 	int ret 	= 0;
@@ -20,12 +20,13 @@ int main(int argc, char **argv) {
 			printf("Unable to open file %s!  Exiting ungracefully...\n", argv[1]);
 		} else {
 			struct parsed_data pd;
+			struct parsed_time end;
 			
 			if ((err = skip_lines(fp, 2)) == 0) {
 				set_fstart(fp);
 				
-				if ((err = interval_data(fp, &pd, stime)) == 0) {
-					print_json(&pd);
+				if ((err = interval_data(fp, &pd, stime, &end)) == 0) {
+					print_json(&pd, &end);
 				} else {
 					printf("parse_avg_minute() failed with %i\n", err);
 				}
@@ -39,17 +40,60 @@ int main(int argc, char **argv) {
 	
 	return ret;
 }
+/*
+ * struct parsed_date {
+	char month[4];
+	int year;
+	int day;
+};
 
-static void print_json(struct parsed_data *pd) {
+struct parsed_time {
+	int hours;
+	int minutes;
+	int seconds;
+	int mseconds;
+};
+
+struct parsed_data {
+	struct parsed_time time;
+	struct parsed_date date;
+	struct meter_data meters[4];
+};
+*/
+
+static void print_json(struct parsed_data *pd, struct parsed_time *end) {
 	char quo = '\"';
-	char arr_name[] = "\"meter_data\"";
 	char met_name[] = "\"meter\"";
 	char watts[]	= "\"watts\"";
 	char var[]		= "\"var\"";
 	char amps[]		= "\"amps\"";
 	char volts[]	= "\"volts\"";
+	int s_hours = pd->time.hours;
+	int s_min	= pd->time.minutes;
+	int s_day	= pd->date.day;
+	int e_hours	= s_hours;
+	int e_min	= end->minutes;
+	int e_day	= s_day;
 	
-	printf("{%s:[", arr_name);
+	/* time manipulation and all that jazzery */
+	/* one of the things I failed to take into account
+	 * is switching between months.  Hopefully this software
+	 * isn't taken into production because it straight up terrible.
+	 */
+	if (e_min >= 60) {
+		e_hours += 1;
+		
+		if (e_hours >= 24) {
+			e_day += 1;
+			e_hours = 0;
+		}
+		
+		e_min = 0;
+	}
+		//meter_data_2016-02-22-17:30-17:45
+	printf("{meter_data_%i-%s-%i-%i:%i-%i:%i:[", pd->date.year, pd->date.month, e_day,
+		s_hours, s_min, e_hours, e_min);
+	//printf("{%s:[", arr_name);
 	
 	for (int i = 0; i < 4; i++) {
 		struct meter_data *md = &pd->meters[i];

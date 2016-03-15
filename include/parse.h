@@ -44,7 +44,7 @@ int average_meter_data(struct parsed_data *pd, int cnt);
 /* read.c */
 void print_parsed_data(struct parsed_data *pd);
 int parse_avg_minute(FILE *fp, struct parsed_data *pd, struct parsed_time *start);
-int interval_data(FILE *fp, struct parsed_data *pd, int start_interval);
+int interval_data(FILE *fp, struct parsed_data *pd, int start_interval, struct parsed_time *end_time);
 int find_by_time(FILE *fp, struct parsed_data *pd, struct parsed_time *pt);
 int skip_lines(FILE *fp, int cnt);
 int set_fstart(FILE *fp);
