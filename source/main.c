@@ -25,10 +25,12 @@ int main(int argc, char **argv) {
 			if ((err = skip_lines(fp, 2)) == 0) {
 				set_fstart(fp);
 				
-				if ((err = interval_data(fp, &pd, stime, &end)) == 0) {
+				err = interval_data(fp, &pd, stime, &end);
+				
+				if (err == 0 || err == ERR_END_OF_FILE) {
 					print_json(&pd, &end);
 				} else {
-					printf("parse_avg_minute() failed with %i\n", err);
+					printf("err: %i\n", err);
 				}
 			}
 			

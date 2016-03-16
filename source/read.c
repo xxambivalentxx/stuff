@@ -136,7 +136,9 @@ int find_by_time(FILE *fp, struct parsed_data *pd, struct parsed_time *pt) {
 			if (fsetpos(fp, &fstart) == 0) {
 				while (!feof(fp)) {
 					if ((ret = read_and_parse(fp, pd)) != 0) {
-						break;
+						if (ret != ERR_BAD_DATA) {
+							break;
+						}
 					} else {
 						if (compare_time(pd, pt) >= 0) {
 							break;
@@ -197,9 +199,9 @@ int parse_avg_minute(FILE *fp, struct parsed_data *pd, struct parsed_time *start
 
 	if (fp != NULL) {
 		if ((err = find_by_time(fp, &out, start)) == 0) {
-			//printf("parse_avg_minute() found time %i/%i/%i/%i\n", out.time.hours, out.time.minutes, out.time.seconds, out.time.mseconds);
 			while (err == 0 && cnt < (60 * 60)) {
 				struct parsed_data rpd;
+				
 				if ((err = read_and_parse(fp, &rpd)) == 0) {
 					if (compare_time(&rpd, &end) <= 0) {
 						add_meter_data(&out, &rpd);
@@ -208,7 +210,7 @@ int parse_avg_minute(FILE *fp, struct parsed_data *pd, struct parsed_time *start
 						break;
 					}
 				} else {
-					if (err == ERR_END_OF_FILE) {
+					if (err == ERR_END_OF_FILE || err == EOF) {
 						err = 0;
 						break;
 					} else {

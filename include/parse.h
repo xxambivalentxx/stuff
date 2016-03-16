@@ -1,14 +1,14 @@
 #ifndef PARSE_H
 #define PARSE_H
 
-#define ERR_SUCCESS		0
+#define ERR_SUCCESS			0
 #define ERR_BAD_STRING		-1
 #define ERR_NULL_STRING		-2
-#define ERR_BAD_FP		-3
+#define ERR_BAD_FP			-3
 #define ERR_BAD_DATA		-4
 #define ERR_BAD_INTERVAL	-5
 #define ERR_END_OF_FILE		-6
-#define ERR_FERROR		-7
+#define ERR_FERROR			-7
 
 struct meter_data {
 	long int 		watts;
