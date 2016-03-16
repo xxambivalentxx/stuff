@@ -69,8 +69,8 @@ static void print_json(struct parsed_data *pd, struct parsed_time *end) {
 		e_min = 0;
 	}
 	
-	printf("{meter_data_%i-%s-%i-%i:%i-%i:%i:[", pd->date.year, pd->date.month, e_day,
-		s_hours, s_min, e_hours, e_min);;
+	printf("{%cmeter_data_%i-%s-%i-%i:%i-%i:%i%c:[", quo,  pd->date.year, pd->date.month, e_day,
+		s_hours, s_min, e_hours, e_min, quo);
 	
 	for (int i = 0; i < 4; i++) {
 		struct meter_data *md = &pd->meters[i];
