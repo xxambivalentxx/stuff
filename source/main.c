@@ -29,8 +29,6 @@ int main(int argc, char **argv) {
 				
 				if (err == 0 || err == ERR_END_OF_FILE) {
 					print_json(&pd, &end);
-				} else {
-					printf("err: %i\n", err);
 				}
 			}
 			
